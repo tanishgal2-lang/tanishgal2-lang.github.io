@@ -361,6 +361,52 @@
 
     footer{padding:34px 0 40px;color:var(--muted);border-top:1px solid rgba(148,163,184,.18);margin-top:28px;font-size:13px;}
 
+
+    .scroll-progress{
+      position:fixed;top:0;left:0;height:4px;width:0%;
+      background:linear-gradient(90deg,var(--brand),var(--brand-2));
+      z-index:60;box-shadow:0 0 18px rgba(96,165,250,.55);
+    }
+
+    .hero-orbit{
+      position:absolute;inset:-24px;pointer-events:none;
+    }
+    .portrait-wrap{position:relative;display:inline-block;}
+    .portrait-glow{
+      position:absolute;inset:10% 10% auto 10%;height:70%;
+      background:radial-gradient(circle, rgba(96,165,250,.32), rgba(34,211,238,.08) 45%, transparent 70%);
+      filter:blur(12px);z-index:-1;
+      border-radius:50%;
+      animation:pulseGlow 5s ease-in-out infinite;
+    }
+    .orbit-ring{
+      position:absolute;inset:-10px;border-radius:50%;
+      border:1px dashed rgba(148,163,184,.22);
+      animation:spin 20s linear infinite;
+    }
+    .orbit-item{
+      position:absolute;top:50%;left:50%;
+      width:74px;height:74px;margin:-37px;
+      display:flex;align-items:center;justify-content:center;
+      transform:rotate(var(--angle)) translateX(var(--radius)) rotate(calc(var(--angle) * -1));
+      animation:counterSpin 20s linear infinite;
+    }
+    .orbit-badge{
+      min-width:74px;padding:8px 10px;border-radius:999px;
+      border:1px solid rgba(148,163,184,.26);
+      background:rgba(2,6,23,.9);
+      box-shadow:0 12px 26px rgba(2,6,23,.35);
+      font-size:11px;font-weight:700;letter-spacing:.2px;text-align:center;
+    }
+    body[data-theme="light"] .orbit-badge{background:#ffffff;}
+    .resume-frame{
+      width:100%;height:60vh;min-height:420px;border:none;border-radius:14px;
+      background:#fff;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes counterSpin{to{transform:rotate(var(--angle)) translateX(var(--radius)) rotate(calc(var(--angle) * -1 - 360deg));}}
+    @keyframes pulseGlow{0%,100%{opacity:.8;transform:scale(1);}50%{opacity:1;transform:scale(1.05);}}
+
     /* responsive */
     @media (max-width:880px){
       .hero{grid-template-columns:1fr;gap:24px;padding-top:26px;}
@@ -375,11 +421,15 @@
       .hero h1{font-size:28px;}
       .subtitle{font-size:14px;}
       .portrait img{width:220px;}
+      .orbit-item{width:62px;height:62px;margin:-31px;transform:rotate(var(--angle)) translateX(125px) rotate(calc(var(--angle) * -1));}
+      .orbit-badge{min-width:62px;font-size:10px;padding:7px 8px;}
+      .orbit-ring{inset:14px;}
       .btn{padding:10px 14px;font-size:15px;}
     }
   </style>
 </head>
 <body>
+  <div class="scroll-progress" id="scrollProgress"></div>
   <header>
     <div class="container">
       <nav>
@@ -420,7 +470,19 @@
         </div>
       </div>
       <div class="portrait">
-        <img src="profile.jpg" alt="Portrait of Tanish Galhawat" loading="lazy">
+        <div class="portrait-wrap">
+          <div class="portrait-glow"></div>
+          <div class="hero-orbit" aria-hidden="true">
+            <div class="orbit-ring"></div>
+            <div class="orbit-item" style="--angle:0deg;--radius:180px;"><div class="orbit-badge">Python</div></div>
+            <div class="orbit-item" style="--angle:60deg;--radius:180px;"><div class="orbit-badge">SQL</div></div>
+            <div class="orbit-item" style="--angle:120deg;--radius:180px;"><div class="orbit-badge">Excel</div></div>
+            <div class="orbit-item" style="--angle:180deg;--radius:180px;"><div class="orbit-badge">GitHub</div></div>
+            <div class="orbit-item" style="--angle:240deg;--radius:180px;"><div class="orbit-badge">Tableau</div></div>
+            <div class="orbit-item" style="--angle:300deg;--radius:180px;"><div class="orbit-badge">Analytics</div></div>
+          </div>
+          <img src="profile.jpg" alt="Portrait of Tanish Galhawat" loading="lazy">
+        </div>
       </div>
     </section>
 
@@ -455,6 +517,13 @@
         <h2>Experience &amp; Leadership</h2>
         <p class="subtitle">Click any role to see more details.</p>
         <div class="timeline">
+          <div class="item" data-modal="exp-fda">
+            <time>Feb 2026 – Present</time>
+            <div>
+              <h3>Front Desk Assistant · Housing &amp; Residence Life, UMass Boston</h3>
+              <p>Serve as the first point of contact for residents, guests, and staff; manage mail distribution, key access, and housing inquiries; support daily front desk operations.</p>
+            </div>
+          </div>
           <div class="item" data-modal="exp-ambassador">
             <time>Oct 2025 – Present</time>
             <div>
@@ -679,6 +748,10 @@
             <a href="https://www.linkedin.com/in/tanish-galhawat" target="_blank" rel="noopener">in/tanish-galhawat</a>
           </div>
           <div class="mini-card" style="grid-column:span 6;">
+            <h3 style="margin:4px 0;">GitHub</h3>
+            <a href="https://github.com/" target="_blank" rel="noopener">GitHub Profile</a>
+          </div>
+          <div class="mini-card" style="grid-column:span 6;">
             <h3 style="margin:4px 0;">Phone</h3>
             <a href="tel:+18573955773">+1 (857) 395-5773</a>
           </div>
@@ -714,6 +787,21 @@
   </main>
 
   <!-- Experience modals -->
+  <div class="modal-backdrop" id="exp-fda">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Front Desk Assistant · Housing &amp; Residence Life</h3>
+        <button class="modal-close" type="button">&times;</button>
+      </div>
+      <p><strong>Feb 2026 – Present · UMass Boston</strong></p>
+      <ul>
+        <li>Serve as the first point of contact for residents, guests, and staff at the residence hall front desk.</li>
+        <li>Manage mail distribution, key access, and housing inquiries while keeping records organized.</li>
+        <li>Support daily front desk operations and help maintain a safe, welcoming residential community.</li>
+      </ul>
+    </div>
+  </div>
+
   <div class="modal-backdrop" id="exp-ambassador">
     <div class="modal">
       <div class="modal-header">
@@ -822,18 +910,33 @@
 
   <!-- Resume modal -->
   <div class="modal-backdrop" id="resumeModal">
-    <div class="modal">
+    <div class="modal" style="width:min(900px,94vw);">
       <div class="modal-header">
         <h3>Résumé</h3>
         <button class="modal-close" type="button">&times;</button>
       </div>
-      <p>You can download my latest résumé as a PDF.</p>
-      <a class="btn small" href="Tanish-Galhawat-Resume.pdf" download>Download Résumé PDF</a>
+      <p>Preview my latest résumé below, or download the PDF directly.</p>
+      <iframe class="resume-frame" src="Tanish-Galhawat-Resume.pdf" title="Tanish Galhawat Resume Preview"></iframe>
+      <div class="cta" style="margin-top:14px;">
+        <a class="btn small" href="Tanish-Galhawat-Resume.pdf" target="_blank" rel="noopener">Open Full Preview</a>
+        <a class="btn small alt" href="Tanish-Galhawat-Resume.pdf" download>Download Résumé PDF</a>
+      </div>
     </div>
   </div>
 
   <script>
     // Year in footer
+    // Scroll progress bar
+    const scrollProgress = document.getElementById('scrollProgress');
+    const updateScrollProgress = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      scrollProgress.style.width = pct + '%';
+    };
+    updateScrollProgress();
+    window.addEventListener('scroll', updateScrollProgress);
+
     document.getElementById('y').textContent = new Date().getFullYear();
 
     // Theme toggle with localStorage
